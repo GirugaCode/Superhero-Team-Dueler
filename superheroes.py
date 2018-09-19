@@ -1,32 +1,7 @@
-# class Dog:
-#     greeting = "Woof!"
-#
-#     def __init__(self, name):
-#         self.name = name
-#
-#     def bark(self):
-#         print(self.greeting)
-#
-# my_dog = Dog("Spot")
-# print(my_dog.name)
-#
-# my_other_Dog = Dog("Annie")
-# print(my_other_Dog.name)
-#
-# my_first_dog = Dog("Annie")
-# my_second_dog = Dog("Wyatt")
-#
-# print(my_first_dog.name)
-# print(my_second_dog.name)
-#
-# my_first_dog.bark()
-# my_second_dog.bark()
-
-
 import random
 
 class Hero:
-    def __init__(self,name):
+    def __init__(self, name):
         self.abilities = list()
         self.name = name
 
@@ -41,6 +16,41 @@ class Hero:
         for add_attack in self.abilities:
             total_attack += add_attack.attack()
         return total_attack
+
+class Team:
+    def __init__(self, team_name):
+        """Intantiate resources"""
+        self.heroes = list()
+        self.name = team_name
+
+    def add_hero(self, Hero):
+        """Add Hero object to heroes list."""
+        self.heroes.append(Hero)
+
+    def remove_hero(self, name):
+        """
+        Remove hero from heroes list.
+        If Hero isn't found return 0.
+        """
+        for hero in self.heroes:
+            if hero.name == name:
+                self.heroes.remove(hero)
+        return 0
+
+    def find_hero(self, name):
+        """
+        Find and return hero from heroes list.
+        If Hero isn't found return 0.
+        """
+        for hero in self.heroes:
+            if hero.name == name:
+                return hero
+        return 0
+
+    def view_all_heroes(self):
+        """Print out all heroes to the console."""
+        for hero in self.heroes:
+            print(hero.name)
 
 class Ability:
     def __init__(self, name, attack_strength):
@@ -59,6 +69,12 @@ class Ability:
     def update_attack(self, attack_strength):
         # Update attack value
         self.attack_strength = attack_strength
+
+class Weapon(Ability):
+    def attack(self):
+        return random.randint(0, self.attack_strength)
+
+
 
 
 if __name__ == "__main__":
