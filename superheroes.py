@@ -1,4 +1,5 @@
 import random
+import os
 
 
 class Hero:
@@ -92,9 +93,11 @@ class Team:
 
     def view_all_heroes(self):
         """Print out all heroes to the console."""
-        myHeroes = []
+        myHeroes = ""
+        print(len(self.heroes))
         for hero in self.heroes:
-            myHeroes.append(hero.name)
+            myHeroes += hero.name
+        print("Hero str: {}".format(myHeroes))
         return myHeroes
 
     def attack(self, other_team):
@@ -106,8 +109,6 @@ class Team:
         totalAttack = 0
         for hero in self.heroes:
             totalAttack += hero.attack()
-
-        # print('total atk: ' + str(totalAttack))
 
         enemiesDead = other_team.defend(totalAttack)
 
@@ -126,17 +127,12 @@ class Team:
         team_total_defense = 0
         for hero in self.heroes:
             team_total_defense += hero.defend()
-        damage = damage_amt - team_total_defense
-        self.deal_damage(damage)
 
-        kills = 0
-        if damage > 0:
-            damage_per_hero = damage // len(self.heroes)
-            for hero in self.heroes:
-                dead = hero.take_damage(damage_per_hero)
-                if dead == 1:
-                    kills += 1
-        return kills
+        if damage_amt > team_total_defense:
+            dead_heroes = self.deal_damage(damage_amt - team_total_defense)
+            return dead_heroes
+
+
 
 
     def deal_damage(self, damage):
@@ -168,22 +164,17 @@ class Team:
             print(hero_stats.name + "K/D: " + str(hero_stats.kills) + "/" + str(hero_stats.deaths))
 
     def update_kills(self, kills):
-
+        """
+        This method should update each hero when there is a team kill.
+        """
         totalTeamKills = 0
         for hero in self.heroes:
             totalTeamKills += hero.kills
         return totalTeamKills
 
-        """
-        This method should update each hero when there is a team kill.
-        """
 
 
-		# rm = kills % len(self.heroes)
-		# self.heroes[0].add_kill(rm)
-		# kills = kills / len(self.heroes)
-		# for i in self.heroes:
-		# 	i.add_kill(kills)
+
 
 class Ability:
     def __init__(self, name, attack_strength):
@@ -225,12 +216,10 @@ class Armor:
         """
         return random.randint(0, self.defense_strength)
 
+
+
 if __name__ == "__main__":
-    hero = Hero("Wonder Woman")
-    print(hero.attack())
-    ability = Ability("Divine Speed", 300)
-    hero.add_ability(ability)
-    print(hero.attack())
-    new_ability = Ability("Super Human Strength", 800)
-    hero.add_ability(new_ability)
-    print(hero.attack())
+    arena = Arena()
+    arena.team_one = arena.build_team(1)
+    arena.team_two = arena.build_team(2)
+    arena.team_battle()
