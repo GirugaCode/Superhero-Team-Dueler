@@ -246,7 +246,8 @@ class Arena:
         power_stats = len(ability_name) * random.randint(1, 5) * 10
         ability_stats = Ability(ability_name, int(power_stats))
         hero_one.add_ability(ability_stats)
-
+        weapon_one = Weapon(self.user_input("What weapon do they use? "), random.randint(1, 5) * 10)
+        hero_one.add_ability(weapon_one)
 
         hero_two = Hero(self.user_input("What is the name of your second hero? "))
         ability_name_two = self.user_input("What is the heroes power? ")
@@ -313,6 +314,14 @@ class Arena:
         print(self.team_two.name + " stats:")
         self.team_two.stats()
 
+    def game_restart(self):
+        choice = self.user_input("Do you want to battle again? [yes/no] ")
+        if choice == "yes" or choice == "y" or choice == "Y":
+            self.team_one.revive_heroes()
+            self.team_two.revive_heroes()
+            game_loop(self)
+
+
 
 
 team_one = Team(input('Enter a team name: '))
@@ -320,5 +329,10 @@ team_two = Team(input('Enter a second team name: '))
 arena = Arena(team_one, team_two)
 arena.build_team_one()
 arena.build_team_two()
-arena.team_battle()
-arena.show_stats()
+
+def game_loop(arena):
+    arena.team_battle()
+    arena.show_stats()
+    arena.game_restart()
+
+game_loop(arena)
